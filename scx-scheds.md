@@ -10,7 +10,8 @@ scx-scheds安装后会提供两个service文件，分别为scx_loader.service和
 
 {{警告|现在不再推荐使用<code>scx.service</code>，推荐使用scx_loader.service}}
 
-需要先检查内核是否支持bpf，执行指令<code>sudo&#32;zcat&#32;/proc/config.gz&#32;|grep&#32;-i&#32;BPF</code>。通常情况下会输出这些内容：<code>CONFIG_BPF=y
+需要先检查内核是否支持bpf，执行指令<code>sudo&#32;zcat&#32;/proc/config.gz&#32;|grep&#32;-i&#32;BPF</code>。通常情况下会输出这些内容：{{hc|head=sudo&#32;zcat&#32;/proc/config.gz&#32;|grep&#32;-i&#32;BPF|output=
+CONFIG_BPF=y
 CONFIG_HAVE_EBPF_JIT=y
 CONFIG_ARCH_WANT_DEFAULT_BPF_JIT=y
 # BPF subsystem
@@ -38,4 +39,4 @@ CONFIG_LSM="landlock,lockdown,yama,integrity,bpf"
 CONFIG_BPF_EVENTS=y
 CONFIG_BPF_KPROBE_OVERRIDE=y
 # CONFIG_TEST_BPF is not set
-</code>
+}}
