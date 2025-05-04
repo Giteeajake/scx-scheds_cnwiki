@@ -30,7 +30,14 @@ scx-scheds 安装后会提供两个 [[systemd]] 服务 {{ic|scx_loader.service}}
 
 === 配置 scx服务 ===
 
-在 {{ic|scx.service}} 中分为两个部分： {{ic|SCX_SCHEDULER}} 和 {{ic|SCX_FLAGS}} 。 {{ic|SCX_SCHEDULER}}	为  scx  调度器，总共14个调度器，主要调度器有4个： {{ic|scx_bpfland}} ， {{ic|scx_rusty}} ， {{ic|scx_flash}} 和 {{ic|scx_lavd}} 。
+在 {{ic|scx.service}} 中分为两个部分： {{ic|SCX_SCHEDULER}} 和 {{ic|SCX_FLAGS}} 。
+{{hc|/etc/default/scx|# List of scx_schedulers: scx_bpfland scx_central scx_flash scx_lavd scx_layered scx_nest scx_qmap scx_rlfifo scx_rustland scx_rusty scx_simple scx_userland scx_p2dq scx_tickless
+SCX_SCHEDULER<nowiki>=</nowiki>scx_bpfland
+
+# Set custom flags for each scheduler, below is an example of how to use
+#SCX_FLAGS<nowiki>=</nowiki>'-p -m performance'
+}}
+{{ic|SCX_SCHEDULER}}	为  scx  调度器，总共14个调度器，主要调度器有4个： {{ic|scx_bpfland}} ， {{ic|scx_rusty}} ， {{ic|scx_flash}} 和 {{ic|scx_lavd}} 。
 
 {{ic|SCX_FLAGS}} 是调度器的启动参数，例如： {{bc|SCX_FLAGS<nowiki>=</nowiki>'-p -m performance'}}  {{ic|-p}} 参数表示 '''启用每颗CPU的任务优先级划分''' 。 {{ic|-m}} 表示使用模式， performance  代表  gaming  或  lowlatency  （低延迟）。
 
@@ -80,7 +87,7 @@ powersave_mode = ["-m", "powersave"]
 === 回退模式 ===
 如果配置文件中未定义特定参数标志， {{ic|scx_loader}} 会自动使用默认的参数标志。
 
-= 参见 =
+== 参见 ==
 
 * [https://wiki.cachyos.org/configuration/sched-ext/ CachyOS sched-ext教程]
 * [https://github.com/sched-ext/scx/blob/main/rust/scx_loader/configuration.md sched-ext配置]
