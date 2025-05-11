@@ -1,5 +1,5 @@
 [[分类:系统管理]]
-{{Pkg|scx-scheds}} 是 scheds-ext 的程序实现，'''scheds-ext'''（Scheduler Extensions）是 Linux 的一个可拓展调度器框架，允许在不修改内核代码的情况下通过 '''[[zhwp:BPF|BPF]]'''（Berkeley Packet Filter）或 eBPF 来实现自定义调度策略。
+{{Pkg|scx-scheds}} 是 scheds-ext 的程序实现，'''scheds-ext'''（Scheduler Extensions）是 Linux 的一个可拓展调度器框架，允许在不修改内核代码的情况下通过 '''[[zhwp:BPF|BPF]]'''（Berkeley Packet Filter）或 eBPF 来实现自定义调度策略，具有少量的性能提升效果。
 
 == 安装 ==
 
@@ -41,6 +41,8 @@ SCX_SCHEDULER<nowiki>=</nowiki>scx_bpfland
 
 {{ic|SCX_FLAGS}} 是调度器的启动参数，例如： {{bc|SCX_FLAGS<nowiki>=</nowiki>'-p -m performance'}}  {{ic|-p}} 参数表示 '''启用每颗CPU的任务优先级划分''' 。 {{ic|-m}} 表示使用模式， performance  代表  gaming  或  lowlatency  （低延迟）。
 
+适用环境： {{ic|scx_rustland}} 旨在优先处理交互式工作负载，而不是后台CPU密集型工作负载，如游戏，实时直播和视频会议等，但不适用于生产环境； {{ic|scx_lavd}} 使用了  '''LAVD'''  （延迟关键性感知虚拟截止时间） 调度算法，旨在提高  Linux  在游戏上的性能提升，虽然仍在开发，但已经能用于生产环境； {{ic|scx_bpfland}} 是 {{ic|scx_rustland}} 的改进版本，完全能用于平常使用和生产环境； {{ic|scx_rusty}} 为一个多域、BPF / 用户空间混合调度器，可以适应不同架构和工作负载，可以投入生产环境，但需要调整。
+
 === 配置 scx_loader服务 ===
 {{注意|  scx_loader  服务的配置文件是不会自动生成的，需要用户手动配置。}}
 scx_loader  的配置文件有两个：  {{ic|/etc/scx_loader.toml}} 和 {{ic|/etc/scx_loader/config.toml}} 。
@@ -52,6 +54,8 @@ auto_mode = ["-m","performance"]}}
 <code>default_sched</code> 意思是默认使用的调度器，{{ic|scx}} 和 {{ic|scx_loader}} 的默认调度器都是 {{ic|scx_bpfland}} ，如果字段为空则什么都不启用。
 <code>default_mode</code> 指默认启动模式，主要参数有： <code>"Auto"</code> ，<code>"LowLatency"</code> ，<code>"PowerSave"</code> ，<code>"Gaming"</code> 和 <code>"Server"</code> 。如果没有参数则为默认模式，即 <code>"Auto"</code> 。
 {{ic|[scheds.scx_name]}} 指对调度器的自定义标志，把 {{ic|scx_name}} 修改为实际的调度程序。参数标志有： <code>auto_mode</code> , <code>gaming_mode</code> , <code>lowlatency_mode</code> , <code>powersave_mode</code> ，<code>server_mode</code> ；每个字段是一个字符串且每个字符串表示一个参数标志。如果没有参数标志则使用默认。
+
+{{注意|<code>server_mode</code>仅 <code>scx_bpfland</code> 可用}}
 
 参考样本：{{hc|/etc/scx_loader.toml |output=default_sched = "scx_bpfland"
 default_mode = "LowLatency"
@@ -91,3 +95,7 @@ powersave_mode = ["-m", "powersave"]
 
 * [https://wiki.cachyos.org/configuration/sched-ext/ CachyOS sched-ext教程]
 * [https://github.com/sched-ext/scx/blob/main/rust/scx_loader/configuration.md sched-ext配置]
+* [https://crates.org.cn/crates/scx_bpfland crates的scx_bpfland]
+* [https://crates.org.cn/crates/scx_rusty crates的scx_rusty]
+* [https://crates.org.cn/crates/scx_rustland crates的scx_rustland]
+* [https://crates.org.cn/crates/scx_lavd crates的scx_lavd]
