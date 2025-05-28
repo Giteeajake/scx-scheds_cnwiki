@@ -1,5 +1,5 @@
 [[分类:系统管理]]
-{{Pkg|scx-scheds}} 是 scheds-ext 的程序实现，'''scheds-ext'''（Scheduler Extensions）是 Linux 的一个可拓展调度器框架，允许在不修改内核代码的情况下通过 '''[[zhwp:BPF|BPF]]'''（Berkeley Packet Filter）或 eBPF 来实现自定义调度策略，具有少量的性能提升效果。
+{{Pkg|scx-scheds}} 是 scheds-ext 的程序实现，'''scheds-ext''' （Scheduler Extensions）是 Linux 的一个可拓展调度器框架，允许在不修改内核代码的情况下通过 '''[[zhwp:BPF|BPF]]'''（Berkeley Packet Filter）或 eBPF 来实现自定义调度策略，具有少量的性能提升效果。
 
 == 安装 ==
 
@@ -21,6 +21,7 @@ scx-scheds 安装后会提供两个 [[systemd]] 服务 {{ic|scx_loader.service}}
 
 {{警告|现在不再推荐使用 {{ic|scx.service}}，推荐使用 {{ic|scx_loader.service}} ，且不要同时运行，否则它们不会执行任何东西。}}
 {{警告|在使用  scheds-ext  框架的任何一个调度器时强烈建议[[禁用]]并[[停止]]使用 {{AUR|ananicy-cpp-git}} 等相关的包，因为 {{AUR|anaicy-cpp-git}} 等相关的包会干扰系统优先级导致  scheds-ext  watchdog  超时，使调度程序被“杀死”。}}
+{{提示|内核的 [[安全#Kernel lockdown mode|Lockdown]] 模式并不会影响 {{ic|scx-scheds}} 调度程序的正常运行。但如果同时使用了 dea VPN 则会在设置为 {{ic|confidentiality}} 下才会受到影响}}
 
 [[启用]] scx_loader 服务。
 
@@ -39,13 +40,13 @@ SCX_SCHEDULER<nowiki>=</nowiki>scx_bpfland
 }}
 {{ic|SCX_SCHEDULER}}	为  scx  调度器，总共14个调度器，主要调度器有4个： {{ic|scx_bpfland}} ， {{ic|scx_rusty}} ， {{ic|scx_flash}} 和 {{ic|scx_lavd}} 。
 
-{{ic|SCX_FLAGS}} 是调度器的启动参数，例如： {{bc|SCX_FLAGS<nowiki>=</nowiki>'-p -m performance'}}  {{ic|-p}} 参数表示 '''启用每颗CPU的任务优先级划分''' 。 {{ic|-m}} 表示使用模式， performance  代表  gaming  或  lowlatency  （低延迟）。
+{{ic|SCX_FLAGS}} 是调度器的启动参数，例如： {{bc|SCX_FLAGS<nowiki>=</nowiki>'-p -m performance'}}  {{ic|-p}} 参数表示 '''启用每颗CPU的任务优先级划分''' 。 {{ic|-m}} 表示使用模式 performance 代表 gaming 或 lowlatency （低延迟）。
 
-适用环境： {{ic|scx_rustland}} 旨在优先处理交互式工作负载，而不是后台CPU密集型工作负载，如游戏，实时直播和视频会议等，但不适用于生产环境； {{ic|scx_lavd}} 使用了  '''LAVD'''  （延迟关键性感知虚拟截止时间） 调度算法，旨在提高  Linux  在游戏上的性能提升，虽然仍在开发，但已经能用于生产环境； {{ic|scx_bpfland}} 是 {{ic|scx_rustland}} 的改进版本，完全能用于平常使用和生产环境； {{ic|scx_rusty}} 为一个多域、BPF / 用户空间混合调度器，可以适应不同架构和工作负载，可以投入生产环境，但需要调整。
+适用环境： {{ic|scx_rustland}} 旨在优先处理交互式工作负载，而不是后台CPU密集型工作负载，如游戏，实时直播和视频会议等，但不适用于生产环境； {{ic|scx_lavd}} 使用了 '''LAVD''' （延迟关键性感知虚拟截止时间） 调度算法，旨在提高 Linux 在游戏上的性能提升，虽然仍在开发，但已经能用于生产环境； {{ic|scx_bpfland}} 是 {{ic|scx_rustland}} 的改进版本，完全能用于平常使用和生产环境； {{ic|scx_rusty}} 为一个多域、BPF / 用户空间混合调度器，可以适应不同架构和工作负载，可以投入生产环境，但需要调整。
 
 === 配置 scx_loader服务 ===
 {{注意|  scx_loader  服务的配置文件是不会自动生成的，需要用户手动配置。}}
-scx_loader  的配置文件有两个：  {{ic|/etc/scx_loader.toml}} 和 {{ic|/etc/scx_loader/config.toml}} 。
+scx_loader 的配置文件有两个： {{ic|/etc/scx_loader.toml}} 和 {{ic|/etc/scx_loader/config.toml}} 。
 文件结构为：{{hc|/etc/scx_loader/config.toml |output=default_sched = "scx_bpfland"
 default_mode = "Auto"
 
